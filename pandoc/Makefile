@@ -47,7 +47,7 @@ viewbeamer:beamer
 pdf:
 	pandoc ${OBJNAME}.md -o ${OBJNAME}.pdf -s --pdf-engine=${PDFENGINE} -V mainfont=${PDFMAINFONT} ${PANDOCOPT}
 
-ppt:
+pptx:
 	pandoc ${OBJNAME}.md -o ${OBJNAME}.pptx ${PANDOCOPT}
 
 tex:
@@ -71,6 +71,7 @@ clean:
 	rm ${OBJNAME}.tex
 	rm ${OBJNAME}.pdf
 	rm ${OBJNAME}.pptx
+	rm ${OBJNAME}.docx
 
 #chromepdf:self
 	#cp ${OBJNAME}.html ~/software/reveal.js/index.html
