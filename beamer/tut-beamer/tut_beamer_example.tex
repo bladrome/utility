@@ -10,6 +10,7 @@
 \usepackage{filecontents}
 \usepackage{blindtext}
 \usepackage{pgfpages}
+\usepackage[fontset=windows]{ctex}
 
 %\setbeameroption{show notes on second screen}% you'll need pgfpages for this one and a suitable pdf viewer i.e. dspdfviewer
 %\setbeameroption{show notes}
@@ -47,13 +48,13 @@
 %   structure: structure elements such as list items
 %\setbeamercolor{palette primary}{fg=white,bg=TUTsecPetrol}
 %\setbeamercolor{palette secondary}{fg=white,bg=TUTsecOrange}
-%\setbeamercolor{palette quaternary}{use=palette secondary,bg=palette secondary.bg!50!black}
+\setbeamercolor{palette quaternary}{use=palette secondary,bg=palette secondary.bg!50!black}
 
-\title{TUT Beamer Theme}
-\subtitle{A theme for typesetting presentation slides using \LaTeX{}}
-\author{Tuomas Välimäki}
-\email{tuomas.s.valimaki@tut.fi}
-\institute{Department of Automation Science and Engineering\\Tampere University of Technology}
+\title{报告模板}
+%\subtitle{A theme for typesetting presentation slides using \LaTeX{}}
+\author{Jack}
+\email{blade\_jack@163.com}
+\institute{College of Information \& Engineering}
 \date{\today}
 
 \begin{document}
@@ -81,7 +82,7 @@
 \note{This is how a note page looks like if you use the beameroptions ``show notes'' or ``show notes on second screen''}
 
 \subsection{Colors}
-\begin{frame}{Colors, 1/2}
+\begin{frame}{Colors}
   \begin{columns}
   \begin{column}{0.475\textwidth}
     All colors introduced in TUT graphic guidelines are predefined.
@@ -118,7 +119,7 @@
   \end{columns}
 \end{frame}
 
-\begin{frame}[containsverbatim]{Colors, 2/2}
+\begin{frame}[containsverbatim]{Colors}
   In addition to defining colors for single items, the color palettes of the theme can be changed.
 
   Try for example adding
@@ -190,7 +191,8 @@
 \section{Further reading}
 \begin{frame}{Further reading}
   \nocite{*}
-  \printbibliography[heading=none]
+  %\printbibliography[heading=none]
+  \printbibliography
 \end{frame}
 
 \end{document}
