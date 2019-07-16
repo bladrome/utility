@@ -1,0 +1,84 @@
+#+TITLE:     Work Report
+#+AUTHOR:    bladrome
+#+EMAIL:     blade_jack@163.com
+#+DATE:      \today
+#+DESCRIPTION:
+#+KEYWORDS:
+#+LANGUAGE:  cn
+#+OPTIONS:   num:t toc:nil \n:nil @:t ::t |:t ^:t -:t f:t *:t <:t
+#+OPTIONS:   TeX:t LaTeX:t skip:nil d:nil todo:t pri:nil tags:not-in-toc
+#+INFOJS_OPT: view:nil toc:nil ltoc:t mouse:underline buttons:1 path:https://orgmode.org/org-info.js
+#+EXPORT_SELECT_TAGS: export
+#+EXPORT_EXCLUDE_TAGS: noexport
+#+LINK_UP:
+#+LINK_HOME:
+#+startup: beamer
+#+LaTeX_CLASS: beamer
+#+LaTeX_CLASS_OPTIONS: [bigger]
+#+BEAMER_FRAME_LEVEL: 2
+
+** Try a new method
+*** The SpectACI of Nonconvex Clusterings: A Spectral Approach to Density-Based Clustering
+   - k-means
+   - Graph Cuts
+   - Spectral Clustering
+
+
+*** Tune SpectACL
+   - Results: 0.82293 0.840329
+*** Calculate ARI & AMI for larger lc clustering
+   - Results: Cut those smaller clusters does increase ARI & AMI *but limited*
+
+** Experiments
+*** Low confident X baseline (format: ARI AMI)
+   - 0.90389 0.86815
+*** Test Clustering on Different dimentsion manifold
+   - Best performance 0.87708 0.86886
+*** VBG on UMAP (low confident X)
+   - Best performance (*NOT stable*) 0.92855 0.90205
+*** Comparision between UMAP and PCA (scatter plot)
+
+
+** Pictures (two columns)
+
+*** Collaboration
+    file:~/Downloads/bump-collaboration-colleagues-1068523.jpg
+
+
+** Pictures (two columns)
+
+*** cup
+    :PROPERTIES:
+    :BEAMER_col: 0.55
+    :BEAMER_env: example
+    :END:
+    #+ATTR_LATEX: width=1.1 \textwidth
+    [[file:///home/bladrome/Downloads/card-coffee-cup-1449082.jpg]]
+
+*** cell phone
+    :PROPERTIES:
+    :BEAMER_col: 0.55
+    :BEAMER_env: example
+    :END:
+    #+ATTR_LATEX: width=1.1 \textwidth
+    [[file:///home/bladrome/Downloads/cellphone-device-electronics-699122.jpg]]
+
+** Maybe other methods (Perspective)?
+*** NMF on kernel
+    - Performance
+*** Parallel
+    - Implement NMF on Hadoop or Spark
+    - Process big data
+
+** Thanks for Attention
+***   **Suggestions & Recommendations**
+   1.
+   2.
+   3.
+   4.
+   5. ...
+
+** END
+#+BEGIN_CENTER
+The End
+#+END_CENTER
