@@ -15,6 +15,7 @@
 #+startup: beamer
 #+LaTeX_CLASS: beamer
 #+LaTeX_CLASS_OPTIONS: [bigger]
+#+BEAMER_HEADER: \hypersetup{pdfpagemode=FullScreen}
 #+BEAMER_FRAME_LEVEL: 2
 
 ** Try a new method
