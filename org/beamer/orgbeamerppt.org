@@ -1,0 +1,338 @@
+#+TITLE: Evaluation of preprocessing, mapping and postprocessing algorithms for analyzing Whole Genome Bisulfite Sequencing data
+#+SUBTITLE: WGBS测序数据预处理，比对，后处理算法的评估
+#+AUTHOR:    Jack
+#+EMAIL:     blade_jack@163.com
+#+DATE:      \today
+#+DESCRIPTION:
+#+KEYWORDS:
+#+LANGUAGE:  cn
+#+OPTIONS:   num:t toc:t \n:nil @:t ::t |:t ^:t -:t f:t *:t <:t
+#+OPTIONS:   TeX:t LaTeX:t skip:nil d:nil todo:t pri:nil tags:not-in-toc
+#+OPTIONS:   H:2
+#+INFOJS_OPT: view:nil toc:nil ltoc:t mouse:underline buttons:1 path:https://orgmode.org/org-info.js
+#+EXPORT_SELECT_TAGS: export
+#+EXPORT_EXCLUDE_TAGS: noexport
+#+LINK_UP:
+#+LINK_HOME:
+#+startup: beamer align
+#+LaTeX_CLASS: beamer
+#+LaTeX_CLASS_OPTIONS:
+#+BEAMER_THEME:
+#+LATEX_HEADER: \hypersetup{pdfpagemode=FullScreen}
+#+LATEX_HEADER: \usepackage [orientation=landscape,size=custom,width=16,height=9,scale=0.5,debug]{beamerposter}
+#+LATEX_HEADER: \usepackage{ctex}
+
+
+** briefings in bioinformatics
+
+*** Zhiping Weng (翁志萍)
+- Director, Program in Bioinformatics and Integrative Biology
+- Professor, Biochemistry and Molecular Pharmacology
+- University of Massachusetts Medical School
+
+Bioinformatics and Computational Genomics
+
+focus on *regulatory molecules and their interactions*,
+such as regulatory proteins and their DNA/RNA target sites, small
+silencing RNAs and their RNA targets, and protein-protein
+interaction.
+
+
+*** IF of briefings in bioinformatics
+
+|-----------+-----------------------------+-------+-------+-------+-------|
+|      ISSN | Name                        |  2015 |  2016 |  2017 |  2018 |
+|-----------+-----------------------------+-------+-------+-------+-------|
+| 1467-5463 | briefings in bioinformatics | 8.399 | 5.134 | 6.302 | 9.101 |
+|-----------+-----------------------------+-------+-------+-------+-------|
+
+
+
+
+* Abstract
+** Background
+Cytosine methylation regulates (胞嘧啶甲基化调控)
+- gene expression　(基因表达)
+- chromatin structure (染色质结构)
+- chromosome stability　(染色体稳定性)
+Many choices of
+- read mapping
+- preprocessing
+- postprocessing
+
+** Current problem
+*** (perforemance of mapping)
+*** (preprocessing + read mapping + postprocessing)
+*** (paired-end or single-end)
+** Work (Contribution)
+*** Simulation
+- 3 datasets
+*** Comparision
+- 3 preprocessing methods
+- 5 postprocessing methods
+- 5 read mapping algorithms
+- paired-end & single-end
+- short reads & long reads
+- repetitive regions
+
+# ** QA
+# - Mott trmming (Yes)
+# - Quality filtering (Yes)
+# - Mott + Quality filtering (No)
+
+** Introduction
+
+DNA methylation (observed in various diseases, especially cancers)
+- CG context (~80% of CG dinucleotides)
+- C *H* G or C *H H* context (~3%; *H* =A, T, or C)
+WGBS bisulfite treatments
+- converts unmethylated cytosines to uracils
+- leaves methylated cytosines intact
+# So problems are: *Mapping and Assess*
+
+** Pipelines
+1. adapter removal
+2. read quality trimming
+3. read mapping
+4. postalignment read filtering
+5. sample heterogeneity assessment
+6. identification of differentially methylated regions
+
+#+begin_center
+*Object: preprocessing, read mapping and postprocessing*
+#+end_center
+
+** Object: preporcessing, read mapping and postprocessing
+*** Preprocessing
+- Running-sum methods (动态累积)
+- Windows-based methods　（窗口）
+*** map
+- wild-card aligners　（通配符）
+- Three-letter aligners　（三字母表）
+*** Postprocessing
+- Coverage filtgering methods　（覆盖度）
+- Quality filtering methods　（质量）
+
+# ** Best pipeline
+# #+begin_center
+   # **... + Mott trimming + ... + (Bismark or LAST) + ...**
+# #+end_center
+
+
+
+* Material and methods
+** Genome annotations and WGBS data sets
+UCSC genome database
+- chr21, hg19
+- allele freq. of SNPs
+- annotated repeats
+- annotatated segmental duplications
+WBGS libraries Gene Expression Omnibus
+- SRR901864: 101nt single-reads (single-end data)
+- SRR568015: 45nt and 50nt paired-end reads (A)
+- SRR771408: 100nt paired-end reads (B)
+
+** Benchmark data
+# - Simulated bisulfite converted reads
+*** Factors
+- (CG, CHG and CHH)
+- (SNPs and indels)
+- paired-end, single-end
+- bisulfite conversion (99% reads)
+- seq error
+- sequencing depth (down-sample)
+
+** Preprocessing: trimming methods
+*** Mott trimming
+移除3'至最小累积质量分数部分
+    # The  3' portion  of  the  read  starting from   the   position   with
+# the   minimum   cumulative   score   is trimmed
+*** Dynamic trimming
+要求窗口内每一位置质量分数高于预设值
+    # The quality scores of each position in the window exceed a preset
+# threshold
+*** Simple trimming
+若某一位置质量低于预设值，丢掉该位置及3'端剩余部分
+    # As soon as it detects a position with quality scores below a preset
+# threshold, it discards this position and the remaining positions at
+# the 3' end of the read
+** Mapping:bisulfite-seq mapping algorithms
+*** bismark (bowtie, bowtie2)
+Three letter
+*** BSMAP
+Wild-card
+*** GSNAP
+Wild-card
+*** BRAT-BW
+Three letter
+*** LAST
+Wild-card
+
+** Postprocessing: filtering methods
+*** Coverage filtering
+ Computed  methylation  levels for cytosines covered by at least n
+ reads. n=3, 5 and 10.
+*** Quality filtering
+ Use reads that covered cytosine and had quality scores greater than
+ or equal to q at this position. q=10, 20
+
+** Evaluation of performance
+*** mapping accuracy
+
+$$ mapping\, sensitivity =  \frac{\#correctly\, mapped\, reads}{\#all\, simulated\, reads} $$
+$$ error\, rate =  \frac{\#incorrectly\, mapped\, reads}{\#all\, simulated\, reads} $$
+
+*** methylation level estimation
+  - Cs correctly covered　（正确覆盖的Cs）
+    - Cs perfectly estimated　（正确估计的Cs）
+    - the error of estimated methylation levels (估计甲基化水平的错误率)
+  - Cs falsely covered　（错误覆盖的Cs）
+
+# ** Repetitive regions & platform
+** Performance in repetitive regions of the genome
+the youngest and the least diverged　（不成熟，最小分歧）
+- Alu elements: AluY subfamily
+- LINE elements: LINE-1P bsubfamily
+
+The fractions of simulated reads in all data sets that fell in the repetitive regions within chromosome 21 were:
+- 0.48–1.21% in AluY
+- 2.54–5.34% in LINE-1P
+- 0.05–0.20% in AT-rich lowcomplexity regions (LCR)
+- 0.05–0.15% in GC-rich LCR
+- 0.02–0.10% in other LCR
+- 1.70–3.41% in segmental duplications
+
+** Runtime and memory usage
+- CPU: (Dell R815 AMD Opteron 6380, 2.5GHz)
+- RAM: 512 GB
+
+
+* Results
+** Mott trimming improves mapping accuracy
+# Figure A
+# Trimming tended to increase sensitivity but sometimes slightly
+# increased error rete Reads trimming is especially effective in
+# increasing the sendsitivity of mapping longer reads
+# Large improvement:Mott trimming for Bismark with Bowtie2
+# Small improvement:Mott trimming for Bismark with Bowtie
+   #+ATTR_LATEX: :width 0.8\textwidth
+   file:~/Pictures/evalwgbs/figure1.png
+
+** Comparison of the mapping performance of the mapping algorithms
+*** Best performance:LAST
+|-------------+------------+------------|
+|             | single-end | paired-end |
+|-------------+------------+------------|
+| sensitivity |      91.8% |      98.9% |
+| error rate  |      0.04% |      0.07% |
+|-------------+------------+------------|
+
+** Figure2a
+   #+ATTR_LATEX: width=1.1 \textwidth
+   file:~/Pictures/evalwgbs/figure2a.png
+** Figure2b
+   #+ATTR_LATEX: :width 0.95\textwidth
+   file:~/Pictures/evalwgbs/figure2b.png
+** Figure3a
+   #+ATTR_LATEX: width=1.1 \textwidth
+   file:~/Pictures/evalwgbs/figure3a.png
+** Figure3b
+   #+ATTR_LATEX: :height 0.75\textheight
+   file:~/Pictures/evalwgbs/figure3b.png
+** Figure3c
+   #+ATTR_LATEX: :width 1\textwidth
+   file:~/Pictures/evalwgbs/figure3c.png
+
+** Paired-end information helps accurate mapping of short reads
+
+- For shorter reads, paired-end information improved the sensitivity
+  for Bismark,  GSNAP  and  LAST,  at  a  small  cost  of  errorrate.
+- For longer  reads, LAST showed a slight improvement and GSNAP showed
+  a noticeable  improvement  in  the  paired-end  mode
+- The mapping algorithms differ in their efficiencies of using paired-end information.
+
+
+** Mott triming imporoves the accuracy of methylation level estimation consistently
+*** Metrics
+    - The fraction of Cs correctly covered
+    - The average  error  in  estimating  methylation  levels  for  the  Cs  correctly covered
+    - The number of Cs falsely covered
+** Figure4ab
+   #+ATTR_LATEX: :width 1.0\textwidth
+   file:~/Pictures/evalwgbs/figure4ab.png
+** Figure4c
+   #+ATTR_LATEX: :width 1.0\textwidth
+   file:~/Pictures/evalwgbs/figure4c.png
+** Figure5
+   #+ATTR_LATEX: :height 0.85\textheight
+   file:~/Pictures/evalwgbs/figure5.png
+# ** Quality filtering imporoves the accuracy of methylation level estimation slightly for paired-end data sets
+** Figure6
+   #+ATTR_LATEX: :height 0.9\textheight
+   file:~/Pictures/evalwgbs/figure6.png
+
+** Running time and memory usage of mapping algorithms
+   #+ATTR_LATEX: :height 0.8\textheight
+   file:~/Pictures/evalwgbs/table3.png
+
+
+
+* Discussion
+** Overall recommendation
+   - Mott  trimming + (Bismark or LAST) without any further filtering
+   - other alignment  algorithms may still be useful in practice, e.g. LAST
+   - Paired-end sequencing for short read lengths (e.g. 50 nt)
+   - single-end sequencing for long reads (e.g. 100 nt)
+   - paired-end sequencing for repetitive regions
+
+** Limitation of benchmark data sets
+   1. contaminant DNA sequences
+   1. adapter sequences
+   1. DNA degradation
+   1. fragment length (uniform distribution?)
+   1. Differential methylation levels of CpGs in different locations
+
+** Object
+*** Preprocessing
+    - Mott trimming
+*** Mapping algorithms
+    - LAST (Best performance,  Adaptive seeds of variable lengths)
+    - Bismark comparable with LAST
+
+*** Postprocessing methods
+   - Coverage filtering with cutoff 3 can eliminate inaccurate
+     methylation estimation originating from a few wrongly mapped
+     reads.
+   - Quality filtering with quality score cutoff 10 is the most
+     effective  postprocessing method, when not combined with Mott
+     trimming.
+
+** Possible enhancement for methylation level estimation at low sequencing depth
+***   Use BSmooth as postprocessing
+   - smoothing may miss individual cytosines that exhibit sharp changes
+     in methylation levels within the genomic block (平滑淹没个体特异峰值)
+   - it can greatly aid the detection of differentially methylated
+     regions in low-coverage samples. (可侦出差异甲基化区域)
+
+
+** Summary
+*** Key Points
+  - Whole  genome  bisulfite  sequencing  (WGBS)  analysis　steps that
+    included 192 combinations of preprocessing,　mapping  and
+    postprocessing  methods  were  evaluated  using  simulated
+    single-end  and  paired-end  data  sets　that closely matched
+    experimental WGBS data sets.
+  - Mott    trimming    for    preprocessing    combined
+    with Bismark   or   LAST   for   mapping   without   any
+    further postprocessing  showed  the  best  accuracy  on
+    methylation level estimation.
+  - Paired-end sequencing reduced errorr and enhanced   sensitivity
+    for   both   read   mapping   and methylation level estimation,
+    especially for short readsand in repetitive regions of the human
+    genome.
+
+** THE END
+*** Thanks for your Attention
+
+# * Problems
+  # - what does bisulfite do?
