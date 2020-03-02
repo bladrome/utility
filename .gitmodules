@@ -1,0 +1,3 @@
+[submodule "process-arxiv-pdf"]
+	path = process-arxiv-pdf
+	url = https://github.com/ycjungSubhuman/process-arxiv-pdf.git
