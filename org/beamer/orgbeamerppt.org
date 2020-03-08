@@ -1,53 +1,86 @@
+#+HTML_HEAD: <link rel="stylesheet" type="text/css" href="../../style.css" />
+#+INFOJS_OPT: view:nil toc:nil ltoc:t mouse:underline buttons:0 path:https://orgmode.org/org-info.js
 #+TITLE: Evaluation of preprocessing, mapping and postprocessing algorithms for analyzing Whole Genome Bisulfite Sequencing data
 #+SUBTITLE: WGBS测序数据预处理，比对，后处理算法的评估
-#+AUTHOR:    Jack
-#+EMAIL:     blade_jack@163.com
-#+DATE:      \today
-#+DESCRIPTION:
+#+AUTHOR: Jack
+#+EMAIL: blade_jack@163.com
+#+DATE: \today
+#+DESCRIPTION: 
 #+KEYWORDS:
-#+LANGUAGE:  cn
-#+OPTIONS:   num:t toc:t \n:nil @:t ::t |:t ^:t -:t f:t *:t <:t
-#+OPTIONS:   TeX:t LaTeX:t skip:nil d:nil todo:t pri:nil tags:not-in-toc
-#+OPTIONS:   H:2
-#+INFOJS_OPT: view:nil toc:nil ltoc:t mouse:underline buttons:1 path:https://orgmode.org/org-info.js
+#+LANGUAGE: cn
+#+LINK_UP:   
+#+LINK_HOME: 
+#+STARTUP: beamer
 #+EXPORT_SELECT_TAGS: export
 #+EXPORT_EXCLUDE_TAGS: noexport
-#+LINK_UP:
-#+LINK_HOME:
-#+startup: beamer align
-#+LaTeX_CLASS: beamer
-#+LaTeX_CLASS_OPTIONS:
-#+BEAMER_THEME:
-#+LATEX_HEADER: \hypersetup{pdfpagemode=FullScreen}
-#+LATEX_HEADER: \usepackage [orientation=landscape,size=custom,width=16,height=9,scale=0.5,debug]{beamerposter}
-#+LATEX_HEADER: \usepackage{ctex}
+
+#+OPTIONS: H:2 num:t toc:tq
+#+OPTIONS: \n:nil @:t ::t |:t ^:t -:t f:t *:t <:t
+#+OPTIONS: TeX:t LaTeX:t skip:nil d:nil todo:t pri:nil tags:not-in-toc
+
+#+LATEX_COMPILER: xelatex
+#+LATEX_HEADER: \usepackage[fontset=windows]{ctex}
+#+LATEX_HEADER: \usepackage{xcolor}
+#+LATEX_HEADER: \setbeamerfont{normal text}{size=\small}
+#+LATEX_CLASS: beamer
+#+LATEX_CLASS_OPTIONS: [presentation, aspectratio=169]
+#+BEAMER_THEME: boxes
+#+BEAMER_COLOR_THEME: default
+#+BEAMER_HEADER: \hypersetup{pdfpagemode=FullScreen}
+
+# #+COLUMNS: %45ITEM %10BEAMER_ENV(Env) %10BEAMER_ACT(Act) %4BEAMER_COL(Col)
+# #+COLUMNS: %40ITEM %10BEAMER_env(Env) %9BEAMER_envargs(Env Args) %4BEAMER_col(Col) %10BEAMER_extra(Extra)
+# #+COLUMNS: %45ITEM %10BEAMER_ENV(Env) %10BEAMER_ACT(Act) %4BEAMER_COL(Col) %8BEAMER_OPT(Opt)
+
+# Bulletpoint lists
+#+BEAMER_HEADER: \setbeamertemplate{itemize item}[circle]
+#+BEAMER_HEADER: \setbeamertemplate{itemize subitem}[triangle]
+#+BEAMER_HEADER: \setbeamertemplate{itemize subsubitem}[square]
 
 
-** briefings in bioinformatics
+# Remove slides navigation symbols
+#+BEAMER_HEADER: \beamertemplatenavigationsymbolsempty
 
-*** Zhiping Weng (翁志萍)
-- Director, Program in Bioinformatics and Integrative Biology
-- Professor, Biochemistry and Molecular Pharmacology
-- University of Massachusetts Medical School
+# Frame margins, background image and title colours
+#+LaTeX_HEADER: \definecolor{blue}{HTML}{0000FF}
+#+LATEX_HEADER: \usebackgroundtemplate{\includegraphics[width=\paperwidth]{img/background.pdf}}
+#+BEAMER_HEADER: \setbeamercolor{frametitle}{fg=blue,bg=white}
+#+BEAMER_HEADER: \setbeamersize{text margin left=1.5cm,text margin right=1.5cm}
+#+BEAMER_HEADER: \addtobeamertemplate{frametitle}{\vspace*{0cm}}{\vspace*{-1cm}}
 
-Bioinformatics and Computational Genomics
+# Use Minted for code syntax highlighting
+#+LaTeX_HEADER: \usepackage{minted}
+#+LaTeX_HEADER: \usemintedstyle{emacs}
 
-focus on *regulatory molecules and their interactions*,
-such as regulatory proteins and their DNA/RNA target sites, small
-silencing RNAs and their RNA targets, and protein-protein
-interaction.
+# Fonts
+# #+LATEX_HEADER: \usefonttheme{professionalfonts}
+# #+LATEX_HEADER: \usefonttheme{serif}
+# #+LATEX_HEADER: \usepackage{fontspec}
+# #+LATEX_HEADER: \setmainfont{Gillius ADF}
 
+# Verbatim text
+#+LATEX_HEADER: \RequirePackage{fancyvrb}
+#+LATEX_HEADER: \DefineVerbatimEnvironment{verbatim}{Verbatim}{fontsize=\scriptsize}
 
-*** IF of briefings in bioinformatics
+# Embed Beamer in frame
+#+LaTeX_HEADER: \AtBeginSection[]{\begin{frame}<beamer>\end{frame}}
 
-|-----------+-----------------------------+-------+-------+-------+-------|
-|      ISSN | Name                        |  2015 |  2016 |  2017 |  2018 |
-|-----------+-----------------------------+-------+-------+-------+-------|
-| 1467-5463 | briefings in bioinformatics | 8.399 | 5.134 | 6.302 | 9.101 |
-|-----------+-----------------------------+-------+-------+-------+-------|
-
-
-
+# Custom title slide background
+#
+# Org Mode uses `\maketitle` to draw the title slide.
+# As Org Mode does not provide any ways to customize the slide title, we override the `\maketitle` function.
+#+LATEX_HEADER: \def\maketitle{
+#+LATEX_HEADER:   {
+#+LATEX_HEADER:     \usebackgroundtemplate{\includegraphics[width=\paperwidth]{img/title-background.pdf}}
+#+LATEX_HEADER:     \setbeamercolor{date}{fg=black}
+#+LATEX_HEADER:     \setbeamercolor{title}{fg=black}
+#+LATEX_HEADER:     \setbeamercolor{author}{fg=black}
+#+LATEX_HEADER:     \setbeamercolor{alerted text}{fg=blue}
+#+LATEX_HEADER:     \begin{frame}
+#+LATEX_HEADER:       \titlepage
+#+LATEX_HEADER:     \end{frame}
+#+LATEX_HEADER:   }
+#+LATEX_HEADER: }
 
 * Abstract
 ** Background
@@ -117,8 +150,6 @@ WGBS bisulfite treatments
 # #+begin_center
    # **... + Mott trimming + ... + (Bismark or LAST) + ...**
 # #+end_center
-
-
 
 * Material and methods
 ** Genome annotations and WGBS data sets
@@ -202,11 +233,6 @@ The fractions of simulated reads in all data sets that fell in the repetitive re
 - 0.02–0.10% in other LCR
 - 1.70–3.41% in segmental duplications
 
-** Runtime and memory usage
-- CPU: (Dell R815 AMD Opteron 6380, 2.5GHz)
-- RAM: 512 GB
-
-
 * Results
 ** Mott trimming improves mapping accuracy
 # Figure A
@@ -227,22 +253,7 @@ The fractions of simulated reads in all data sets that fell in the repetitive re
 | error rate  |      0.04% |      0.07% |
 |-------------+------------+------------|
 
-** Figure2a
-   #+ATTR_LATEX: width=1.1 \textwidth
-   file:~/Pictures/evalwgbs/figure2a.png
 ** Figure2b
-   #+ATTR_LATEX: :width 0.95\textwidth
-   file:~/Pictures/evalwgbs/figure2b.png
-** Figure3a
-   #+ATTR_LATEX: width=1.1 \textwidth
-   file:~/Pictures/evalwgbs/figure3a.png
-** Figure3b
-   #+ATTR_LATEX: :height 0.75\textheight
-   file:~/Pictures/evalwgbs/figure3b.png
-** Figure3c
-   #+ATTR_LATEX: :width 1\textwidth
-   file:~/Pictures/evalwgbs/figure3c.png
-
 ** Paired-end information helps accurate mapping of short reads
 
 - For shorter reads, paired-end information improved the sensitivity
@@ -251,31 +262,11 @@ The fractions of simulated reads in all data sets that fell in the repetitive re
   a noticeable  improvement  in  the  paired-end  mode
 - The mapping algorithms differ in their efficiencies of using paired-end information.
 
-
 ** Mott triming imporoves the accuracy of methylation level estimation consistently
 *** Metrics
     - The fraction of Cs correctly covered
     - The average  error  in  estimating  methylation  levels  for  the  Cs  correctly covered
     - The number of Cs falsely covered
-** Figure4ab
-   #+ATTR_LATEX: :width 1.0\textwidth
-   file:~/Pictures/evalwgbs/figure4ab.png
-** Figure4c
-   #+ATTR_LATEX: :width 1.0\textwidth
-   file:~/Pictures/evalwgbs/figure4c.png
-** Figure5
-   #+ATTR_LATEX: :height 0.85\textheight
-   file:~/Pictures/evalwgbs/figure5.png
-# ** Quality filtering imporoves the accuracy of methylation level estimation slightly for paired-end data sets
-** Figure6
-   #+ATTR_LATEX: :height 0.9\textheight
-   file:~/Pictures/evalwgbs/figure6.png
-
-** Running time and memory usage of mapping algorithms
-   #+ATTR_LATEX: :height 0.8\textheight
-   file:~/Pictures/evalwgbs/table3.png
-
-
 
 * Discussion
 ** Overall recommendation
@@ -314,7 +305,6 @@ The fractions of simulated reads in all data sets that fell in the repetitive re
    - it can greatly aid the detection of differentially methylated
      regions in low-coverage samples. (可侦出差异甲基化区域)
 
-
 ** Summary
 *** Key Points
   - Whole  genome  bisulfite  sequencing  (WGBS)  analysis　steps that
@@ -331,8 +321,7 @@ The fractions of simulated reads in all data sets that fell in the repetitive re
     especially for short readsand in repetitive regions of the human
     genome.
 
-** THE END
-*** Thanks for your Attention
-
-# * Problems
-  # - what does bisulfite do?
+** 
+#+begin_center
+\LARGE\textcolor{black}{Thanks For Your Attention!}
+#+end_center
