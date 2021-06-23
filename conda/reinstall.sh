@@ -14,13 +14,12 @@ do
     conda deactivate
 done
 
-rm -rf $condadir
-
+# rm -rf $condadir
 wget https://mirrors.tuna.tsinghua.edu.cn/anaconda/archive/Anaconda3-2021.05-Linux-x86_64.sh
-bash Anaconda3-2021.05-Linux-x86_64.sh -p $condadir -b
+bash Anaconda3-2021.05-Linux-x86_64.sh -p $condadir -b -u
 
 for myenv in envs/*yaml
 do
     echo $myenv
-    conda envv create -f $myenv
+    conda env create -f $myenv
 done
