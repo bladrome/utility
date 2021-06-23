@@ -1,10 +1,10 @@
 #!/usr/bin/env bash
 
 
-sqlitefile="KEGG.sqlite"
+sqlitefile=$1
 
 tables=`sqlite3 $sqlitefile ".tables"`
 for table in $tables
 do
-    sqlite3 -header -csv $sqlitefile "select * from $table;" > $table.csv
+    sqlite3 -header -csv $sqlitefile "select * from $table;" > ${sqlitefile%.*}_${table}.csv
 done
