@@ -39,7 +39,7 @@ a { white-space: pre !important; }
 
 pre.src:before {
     /* border: 0px !important; */
-    /* background-color: inherit !important; */
+    background-color: inherit !important;
     padding: 3px !important;
     border-radius: 20px 50px !important;
     font-weight:700
@@ -50,19 +50,19 @@ pre.src:before {
 
  /* Also curvy inline code with ~ ⋯ ~ and = ⋯ = */
  code {
-     /* background: Cyan !important; */
-     background: pink !important;
+     background: Cyan !important;
+     /* background: pink !important; */
      border-radius: 7px;
      /* border: 1px solid lightgrey; background: #FFFFE9; padding: 2px */
  }
 
  table {
-     background: pink;
+     background: white;
      border-radius: 10px;
      /* width:90% */
 
-     border-bottom: hidden;
-     border-top: hidden;
+     /* border-bottom: hidden; */
+     /* border-top: hidden; */
 
      display: table !important;
 
