@@ -19,7 +19,7 @@ a { white-space: pre !important; }
 /* use normalize.css instead of reset
    http://stackoverflow.com/a/8357635/114833 */
 /* @import "compass/reset"; */
-@import "https://fonts.font.im/css?family=Lora:400,400i,700,700i|Source+Code+Pro|Source+Sans+Pro:700,700i";
+@import "https://fonts.googleapis.com/css?family=Lora:400,400i,700,700i|Source+Code+Pro|Source+Sans+Pro:700,700i";
 /*! HTML5 Boilerplate v4.3.0 | MIT License | http://h5bp.com/ */
 /*
  * What follows is the result of much research on cross-browser styling.
@@ -392,9 +392,10 @@ blockquote {
 }
 
 body {
+    font-size: 14pt;
     font-family: Lora, Palatino, Georgia, serif;
     width: 92%;
-    max-width: 1024px;
+    /* max-width: 1024px; */
     margin: 0 auto;
     background-color: #FFF;
 }
